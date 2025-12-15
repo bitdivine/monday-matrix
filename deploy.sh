@@ -4,12 +4,12 @@ set -e
 echo "🚀 Starting deployment process..."
 
 # Setup Motoko compiler symlinks to use dfx-bundled compiler
-if [ ! -x "/home/ubuntu/.motoko/moc/0.16.3-caffeine-4/bin/moc" ]; then
+if [ ! -x "/home/ubuntu/.motoko/moc/0.16.3-implicits-25/bin/moc" ]; then
   echo "🔗 Setting up Motoko compiler symlinks..."
   DFX_CACHE=$(dfx cache show)
-  mkdir -p /home/ubuntu/.motoko/moc/0.16.3-caffeine-4/bin
-  ln -sf "$DFX_CACHE/moc" /home/ubuntu/.motoko/moc/0.16.3-caffeine-4/bin/moc
-  ln -sf "$DFX_CACHE/base" /home/ubuntu/.motoko/base/0.16.1
+  mkdir -p /home/ubuntu/.motoko/moc/0.16.3-implicits-25/bin
+  ln -sf "$DFX_CACHE/moc" /home/ubuntu/.motoko/moc/0.16.3-implicits-25/bin/moc
+  ln -sf "$DFX_CACHE/base" /home/ubuntu/.motoko/base/MOTOKO_BASE_LIB_VERSION
   echo "✅ Motoko compiler symlinks created"
 else
   echo "✅ Motoko compiler already configured"
@@ -21,7 +21,7 @@ dfx start --background || echo "dfx replica already running or failed to start"
 
 # Run build script
 echo "🔨 Running build script..."
-bash build.sh
+bash src/build.sh
 
 # Deploy backend canister
 echo "📦 Deploying backend canister..."

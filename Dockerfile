@@ -101,34 +101,10 @@ ENV HOME=/home/ubuntu
 RUN mkdir -p /home/ubuntu/bin
 ENV PATH=/home/ubuntu/.mops/bin:/home/ubuntu/bin:${PATH}
 
-# Install new Motoko compiler
+# Install Motoko compiler
 RUN <<EOF
 set -e
-MOTOKO_VERSION=0.16.3-implicits-26
-case ${TARGETARCH:-$(uname -m)} in
-    amd64|x86_64)
-        COMPILER_TARBALL="motoko-Linux-x86_64-${MOTOKO_VERSION}.tar.gz"
-        ;;
-    arm64|aarch64)
-        COMPILER_TARBALL="motoko-Linux-aarch64-${MOTOKO_VERSION}.tar.gz"
-        ;;
-    *)
-        echo "Error: Unsupported architecture" >&2
-        exit 1
-        ;;
-esac
-COMPILER_INSTALL_DIR="$HOME/.motoko/moc/$MOTOKO_VERSION/bin"
-mkdir -p "$COMPILER_INSTALL_DIR"
-COMPILER_RELEASE_URL="https://github.com/caffeinelabs/motoko/releases/download/${MOTOKO_VERSION}/${COMPILER_TARBALL}"
-curl -L "$COMPILER_RELEASE_URL" | tar -xz -C "$COMPILER_INSTALL_DIR"
-COMPILER_BINARY_DIR=$(find "$COMPILER_INSTALL_DIR" -name "moc" -type f | head -1)
-chmod +x "$COMPILER_BINARY_DIR"
-EOF
-
-# Install old Motoko compiler
-RUN <<EOF
-set -e
-MOTOKO_VERSION=0.16.3-caffeine-4
+MOTOKO_VERSION=0.16.3-implicits-25
 case ${TARGETARCH:-$(uname -m)} in
     amd64|x86_64)
         COMPILER_TARBALL="motoko-Linux-x86_64-${MOTOKO_VERSION}.tar.gz"
@@ -178,6 +154,6 @@ WORKDIR /workdir
 COPY --chown=ubuntu:ubuntu . /workdir/
 
 RUN chmod +x /workdir/deploy.sh
-RUN chmod +x /workdir/build.sh
+RUN chmod +x /workdir/src/build.sh
 
 ENTRYPOINT ["/workdir/deploy.sh"]
